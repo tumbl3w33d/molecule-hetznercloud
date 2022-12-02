@@ -18,9 +18,10 @@ def get_hetznercloud_networks(data, request):
 
         for platform in data:
             if "networks" in platform:
-                for network_name, values in platform["networks"].items():
-                    del values["subnet"]
-                    values["name"] = network_name
+                for network in platform["networks"]:
+                    values = network
+                    del network["subnet"]
+                    network_name = network['name']
                     if network_name in network_list:
                         network_list[network_name] = merge_two_dicts(
                             network_list[network_name], values
@@ -35,8 +36,9 @@ def get_hetznercloud_networks(data, request):
         for platform in data:
             name = platform["name"]
             if "networks" in platform:
-                for network_name, values in platform["networks"].items():
-                    values["name"] = network_name
+                for network in platform["networks"]:
+                    values = network
+                    network_name = network['name']
                     if "subnet" in values:
                         values["subnet"]["server_name"] = name
                         values["subnet"]["network_name"] = network_name

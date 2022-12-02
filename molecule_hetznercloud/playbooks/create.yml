@@ -128,7 +128,7 @@
             "port": "{{ ssh_port }}",
             "identity_file": "{{ ssh_path }}",
             "volumes": "{{ item.item.item.volumes | default({}) }}",
-            "networks": "{{ item.item.item.networks | default({}) | dict2items(key_name='name', value_name='data') }}",
+            "networks": "{{ item.item.item.networks | default([]) }}",
           }
       with_items: "{{ hetzner_jobs.results }}"
       register: instance_config_dict

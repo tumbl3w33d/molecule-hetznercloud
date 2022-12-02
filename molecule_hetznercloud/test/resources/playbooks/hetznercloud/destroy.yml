@@ -61,11 +61,14 @@
 
     - name: Destroy network(s)
       hcloud_network:
-        name: "{{ item.1.name }}"
+        name: "{{ item.name }}"
         api_token: "{{ lookup('env', 'HCLOUD_TOKEN') }}"
         state: absent
       register: networks
-      loop: "{{ instance_conf|subelements('networks', skip_missing=True) }}"
+      when: "'name' in item"
+      loop: "{{ instance_conf | subelements('networks', skip_missing=True) | flatten }}"
+      loop_control:
+        label: "{{ item.name | default(item) }}"
 
     - name: Remove registered SSH key
       hcloud_ssh_key:
